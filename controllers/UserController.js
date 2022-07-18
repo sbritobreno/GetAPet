@@ -1,6 +1,10 @@
 const User = require('../models/User')
 const bcrypt = require('bcrypt')
+const jwt = require('jsonwebtoken')
+
+// Helpers
 const createUserToken = require('../helpers/create-user-token')
+const getToken = require('../helpers/get-token')
 
 module.exports = class UserController {
 
@@ -70,5 +74,66 @@ module.exports = class UserController {
         }
     }
 
+    static async login(req, res){
+        const { email, password } = req.body
 
+        if(!email){
+            res.status(422).json({message: 'O email eh obrigatorio'})
+            return
+        }
+
+        if(!password){
+            res.status(422).json({message: 'A senha eh obrigatoria'})
+            return
+        }
+
+        // check if user exists
+        const user = await User.findOne({email: email})
+
+        if(!user){
+            res.status(422).json({message: 'Nao existe usuario com este email!'})
+            return
+        }
+
+        // check password
+        const checkPassword = await bcrypt.compare(password, user.password)
+
+        if(!checkPassword){
+            res.status(422).json({message: 'Senha invalida!'})
+            return
+        }
+        
+        await createUserToken(user, req, res)
+    }
+
+    static async checkUser(req, res){
+        let currentUser
+
+        if(req.headers.authorization){
+
+            const token = getToken(req)
+            const decoded = jwt.verify(token, "nossosecret")
+
+            currentUser = await User.findById(decoded.id)
+            currentUser.password = undefined
+
+        } else {
+            currentUser = null
+        }
+
+        res.status(200).send(currentUser)
+    }
+
+    static async getUserById(req, res){
+        const id = req.params.id
+
+        const user = await User.findById(id).select('-password')  // select in this case is being used to unselect this field
+
+        if(!user){
+            res.status(422).json({message: 'Usuario nao encontrado'})
+            return
+        }
+
+        res.status(200).json({ user })
+    }
 }
