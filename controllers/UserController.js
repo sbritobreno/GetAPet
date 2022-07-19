@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken')
 // Helpers
 const createUserToken = require('../helpers/create-user-token')
 const getToken = require('../helpers/get-token')
+const getUserByToken = require('../helpers/get-user-by-token')
 
 module.exports = class UserController {
 
@@ -22,6 +23,9 @@ module.exports = class UserController {
             res.status(422).json({message: 'O nome eh obrigatorio'})
             return
         }
+        
+        user.name = name
+
         if(!email){
             res.status(422).json({message: 'O email eh obrigatorio'})
             return
@@ -138,7 +142,54 @@ module.exports = class UserController {
     }
 
     static async editUser(req, res) {
-        res.status(200).json({message: 'Deu certo update!'})
-        return
+        const id = req.params.id
+
+        // check if user exists
+        const token = getToken(req)
+        const user = await getUserByToken(token)
+
+        const { name, email, phone, password, confirmpassword } = req.body
+        let image = ''
+
+        // Validations
+        if(!name){
+            res.status(422).json({message: 'O nome eh obrigatorio'})
+            return
+        }
+
+        user.name = name
+
+        if(!email){
+            res.status(422).json({message: 'O email eh obrigatorio'})
+            return
+        }
+
+        //check if the email was already taken
+        const userExists = await User.findOne({email: email})
+
+        if(user.email !== email && userExists){
+            res.status(422).json({message: 'Por favor, utilize outro email'})
+            return
+        }
+
+        user.email = email
+
+        if(!phone){
+            res.status(422).json({message: 'O telefone eh obrigatorio'})
+            return
+        }
+        if(!password){
+            res.status(422).json({message: 'A senha eh obrigatorio'})
+            return
+        }
+        if(!confirmpassword){
+            res.status(422).json({message: 'A confirmacao de senha eh obrigatorio'})
+            return
+        }
+        if(password !== confirmpassword){
+            res.status(422).json({message: 'A confirmacao de senha nao confere!'})
+            return
+        }
+
     }
 }
