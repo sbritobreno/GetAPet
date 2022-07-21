@@ -1,5 +1,3 @@
-// npm install bcrypt express cookie-parser cors jsonwebtoken mongoose nodemon multer
-
 const express = require('express')
 const cors = require('cors')
 
