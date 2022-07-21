@@ -76,4 +76,10 @@ module.exports = class PetController {
             res.status(500).json({message: error})
         }
     }
+
+    static async getAll(reeq, res){
+        const pets = await Pet.find().sort('-createdAt')
+
+        res.status(200).json({pets: pets,})
+    }
 }
