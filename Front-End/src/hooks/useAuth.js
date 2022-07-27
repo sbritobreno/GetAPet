@@ -4,7 +4,20 @@ import {useHistory} from 'react-router-dom'
 import useFlashMessage from './useFlashMEssage'
 
 export default function useAuth(){
+    const [authenticated, setAuthenticated] = useState(false)
     const {setFlashMessage} = useFlashMessage()
+    const history = useHistory()
+
+    useEffect(() => {
+
+        const token = localStorage.getItem('token')
+
+        if(token){
+            api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`
+            setAuthenticated(true)
+        }
+    }, [])
+
     async function register(user){
 
         let msgText = 'Cadastro realizado com sucesso!'
@@ -15,7 +28,8 @@ export default function useAuth(){
                 return response.data
             })
 
-            console.log(data)
+            await authUser(data)
+
         } catch (error) {
             msgText = error.response.data.message
             msgType = 'error'
@@ -24,5 +38,14 @@ export default function useAuth(){
         setFlashMessage(msgText, msgType)
     }
 
-    return {register}
+    async function authUser(data) {
+
+        setAuthenticated(true)
+
+        localStorage.setItem('token', JSON.stringify(data.token))
+
+        history.push('/')
+    }
+
+    return {authenticated, register}
 }
