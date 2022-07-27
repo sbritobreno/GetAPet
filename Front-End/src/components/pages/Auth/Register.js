@@ -53,7 +53,7 @@ function Register() {
                     handleOnChange={handleChange}
                 />
                 <Input
-                    text="Confirmacao deSenha"
+                    text="Confirmacao de Senha"
                     type="password"
                     name="confirmpassword"
                     placeholder="Confirme a sua senha"
