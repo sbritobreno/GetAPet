@@ -8,7 +8,7 @@ import {Context} from '../../context/UserContext'
 
 function Navbar() {
 
-    const {authenticated} = useContext(Context)
+    const {authenticated, logout} = useContext(Context)
 
     return (
         <nav className={styles.navbar}>
@@ -23,7 +23,7 @@ function Navbar() {
                 {authenticated ? (
                     //Empty tags as it is not allowed to have more than one child component <></>
                     <>
-                    <p>Logado</p>
+                    <li onClick={logout}>Sair</li>
                     </>
                     ) : (
                     <>  
