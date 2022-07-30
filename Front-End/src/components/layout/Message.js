@@ -16,10 +16,18 @@ function Message(){
 
             setTimeout(() => {
                 setVisibility(false)
-            }, 3000)
+            }, 4000)
         })
 
     }, [])
+
+    useEffect(() => {
+        if (document.querySelector(".close") !== null) {
+          document
+            .querySelector(".close")
+            .addEventListener("click", () => setVisibility(false));
+        }
+      });
 
     return (
         visibility && (
