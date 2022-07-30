@@ -14,6 +14,7 @@ import Home from './components/pages/Home'
 import Profile from './components/pages/User/Profile'
 import MyPets from './components/pages/Pet/MyPets'
 import AddPet from './components/pages/Pet/AddPet'
+import EditPet from './components/pages/Pet/EditPet';
 
 /* context */
 import {UserProvider} from './context/UserContext'
@@ -40,6 +41,9 @@ function App() {
             </Route>
             <Route path="/pet/add">
               <AddPet />
+            </Route>
+            <Route path="/pet/edit/:id">
+              <EditPet />
             </Route>
             <Route path="/">
               <Home />
