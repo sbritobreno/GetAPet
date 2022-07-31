@@ -24,6 +24,9 @@ function Navbar() {
                     //Empty tags as it is not allowed to have more than one child component <></>
                     <>
                     <li>
+                        <Link to="/pet/myadoptions">Minhas Adocoes</Link>
+                    </li>
+                    <li>
                         <Link to="/pet/mypets">Meus Pets</Link>
                     </li>
                     <li>

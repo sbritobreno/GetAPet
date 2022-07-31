@@ -10,13 +10,31 @@ function PetDetails() {
     const [pet, setPet] = useState({})
     const {id} = useParams()
     const {setFlashMessage} = useFlashMessage()
-    const [token] = useState(localStorage.getItem('token'))
+    const [token] = useState(localStorage.getItem('token') || '')
 
     useEffect(() => {
         api.get(`/pets/${id}`).then((response) => {
             setPet(response.data.pet)
         })
     }, [id])
+
+    async function schedule() {
+
+        let msgType = 'success'
+
+        const data = await api.patch(`pets/schedule/${pet._id}`, {
+            Authorization: `Bearer ${JSON.parse(token)}`
+        })
+        .then((response) => {
+            return response.data
+        })
+        .catch((err) => {
+            msgType = 'error'
+            return err.response.data
+        })
+
+        setFlashMessage(data.message, msgType)
+    }
 
     return (
         <>
@@ -29,9 +47,9 @@ function PetDetails() {
                     <div className={styles.pet_images}>
                         {pet.images.map((image, index) => (
                             <img
-                                src={`${process.env.REACT_APP_API}/images/pets/${pet.images}`}
-                                alt={pet.name}
                                 key={index}
+                                src={`${process.env.REACT_APP_API}/images/pets/${image}`}
+                                alt={pet.name}
                             />
                         ))}
                     </div>
@@ -42,7 +60,7 @@ function PetDetails() {
                         <span className='bold'>Idade:</span> {pet.age} anos
                     </p>
                     {token ? (
-                        <button>Solicitar uma visita</button>
+                        <button onClick={schedule}>Solicitar uma visita</button>
                     ) : (
                         <p>Voce precisa <Link to="/register">criar uma conta</Link> para solicitar a visita</p>
                     )}
