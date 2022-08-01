@@ -11,7 +11,7 @@ function Home() {
             setPets(response.data.pets)
             console.log(pets)
         })
-    },[])
+    },[pets])
 
     return (
         <section>

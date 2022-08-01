@@ -1,4 +1,4 @@
-import {useState, useEffect, useReducer} from 'react'
+import {useState, useEffect} from 'react'
 import api from '../../../utils/api'
 import styles from './Profile.module.css'
 import formStyles from '../../form/Form.module.css'
