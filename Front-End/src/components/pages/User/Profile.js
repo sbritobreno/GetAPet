@@ -16,7 +16,7 @@ function Profile() {
 
     api.get('/users/checkuser', {
       headers: {
-        Authrization: `Bearer ${JSON.parse(token)}`
+        Authorization: `Bearer ${JSON.parse(token)}`
       }
     }).then((response) => {
       setUser(response.data)
@@ -44,7 +44,7 @@ function Profile() {
 
     const data = await api.patch(`/users/edit/${user._id}`, formData, { 
       headers: {
-        Authrization: `Bearer ${JSON.parse(token)}`,
+        Authorization: `Bearer ${JSON.parse(token)}`,
         'Content-Type': 'multipart/form-data'
       }
     }).then((response) => {

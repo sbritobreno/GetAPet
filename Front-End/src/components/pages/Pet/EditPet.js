@@ -15,7 +15,7 @@ function EditPet() {
 
     useEffect(() => {
         api.get(`/pets/${id}`, {
-            Authrization: `Bearer ${JSON.parse(token)}`
+            Authorization: `Bearer ${JSON.parse(token)}`
         })
         .then((response) => {
             setPet(response.data.pet)
